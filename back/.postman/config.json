@@ -1,0 +1,195 @@
+{
+  "id": "smarttest-collection",
+  "name": "SmartTest API",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Arsen\",\n  \"email\": \"arsen@test.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/users/register", "host": ["{{base_url}}"], "path": ["api","users","register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.environment.set('token', json.token); console.log('Token saved!'); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"arsen@test.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/users/login", "host": ["{{base_url}}"], "path": ["api","users","login"] }
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/users/me", "host": ["{{base_url}}"], "path": ["api","users","me"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Arsen Updated\",\n  \"bio\": \"Full-stack developer\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/users/me", "host": ["{{base_url}}"], "path": ["api","users","me"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"newpassword123\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/users/password", "host": ["{{base_url}}"], "path": ["api","users","password"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tests",
+      "item": [
+        {
+          "name": "Get All Tests",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/tests", "host": ["{{base_url}}"], "path": ["api","tests"] }
+          }
+        },
+        {
+          "name": "Get All Tests (filter)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/tests?difficulty=easy&category=Frontend",
+              "host": ["{{base_url}}"],
+              "path": ["api","tests"],
+              "query": [
+                { "key": "difficulty", "value": "easy" },
+                { "key": "category",   "value": "Frontend" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Test by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/tests/{{test_id}}", "host": ["{{base_url}}"], "path": ["api","tests","{{test_id}}"] }
+          }
+        },
+        {
+          "name": "Create Test",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.test && json.test._id) { pm.environment.set('test_id', json.test._id); console.log('Test ID saved:', json.test._id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Тест по JavaScript\",\n  \"description\": \"Базовый синтаксис и конструкции JS\",\n  \"category\": \"Frontend\",\n  \"difficulty\": \"easy\",\n  \"questions\": [\n    {\n      \"text\": \"Что такое замыкание?\",\n      \"options\": [\"Функция\", \"Замыкание — функция с доступом к внешним переменным\", \"Массив\", \"Объект\"],\n      \"correctIndex\": 1\n    },\n    {\n      \"text\": \"Что выведет typeof null?\",\n      \"options\": [\"null\", \"undefined\", \"object\", \"number\"],\n      \"correctIndex\": 2\n    }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/tests", "host": ["{{base_url}}"], "path": ["api","tests"] }
+          }
+        },
+        {
+          "name": "Update Test",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Обновлённый тест\",\n  \"difficulty\": \"medium\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/tests/{{test_id}}", "host": ["{{base_url}}"], "path": ["api","tests","{{test_id}}"] }
+          }
+        },
+        {
+          "name": "Submit Test",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"answers\": [\n    { \"questionId\": \"{{question_id}}\", \"selectedIndex\": 1 },\n    { \"questionId\": \"{{question_id_2}}\", \"selectedIndex\": 2 }\n  ]\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/tests/{{test_id}}/submit", "host": ["{{base_url}}"], "path": ["api","tests","{{test_id}}","submit"] }
+          }
+        },
+        {
+          "name": "Delete Test",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{base_url}}/api/tests/{{test_id}}", "host": ["{{base_url}}"], "path": ["api","tests","{{test_id}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{base_url}}/api/health", "host": ["{{base_url}}"], "path": ["api","health"] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:5000" },
+    { "key": "token",    "value": "" },
+    { "key": "test_id",  "value": "" }
+  ]
+}
