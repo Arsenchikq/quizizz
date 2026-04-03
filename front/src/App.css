@@ -266,3 +266,71 @@ select.form-control option{background:var(--bg-2);color:var(--text)}
 /* RESPONSIVE */
 @media(max-width:900px){.profile-grid{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}.hero-stats{grid-template-columns:repeat(2,1fr)}.options-constructor{grid-template-columns:1fr}}
 @media(max-width:640px){.hero-stats{grid-template-columns:1fr 1fr}.page-header{flex-direction:column;align-items:flex-start}.profile-hero{flex-direction:column;align-items:flex-start}.cta-actions{flex-direction:column;align-items:center}.hero-actions{flex-direction:column}.container{padding:0 16px}}
+
+/* ══════════════════════════════════════════════════════
+   NEW ADDITIONS — roles, mobile nav, timer, leaderboard, admin
+   ══════════════════════════════════════════════════════ */
+
+/* Spin animation */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{display:inline-block;animation:spin .7s linear infinite}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;padding:8px;border:none;background:none;cursor:pointer}
+.hamburger span{display:block;width:22px;height:2px;background:var(--text-2);border-radius:2px;transition:all .25s var(--ease)}
+.hamburger .ham-open:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--text)}
+.hamburger .ham-open:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger .ham-open:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--text)}
+
+/* MOBILE DRAWER */
+.mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:500;animation:fadeIn .15s ease}
+.mob-drawer{position:fixed;top:0;right:0;width:min(320px,90vw);height:100vh;background:var(--bg-1);border-left:1px solid var(--border);display:flex;flex-direction:column;animation:slideIn .2s var(--ease)}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:none}}
+.mob-head{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid var(--border)}
+.mob-user{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.mob-links{display:flex;flex-direction:column;padding:8px 0;overflow-y:auto;flex:1}
+.mob-link{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:.9rem;color:var(--text-2);text-decoration:none;border:none;background:none;cursor:pointer;font-family:inherit;text-align:left;transition:all .15s}
+.mob-link:hover,.mob-link.active{background:var(--bg-2);color:var(--text)}
+.mob-link.active{color:var(--text);font-weight:600}
+.mob-logout{color:var(--err)!important}
+.mob-logout:hover{background:var(--err-bg)!important}
+
+/* ROLE SELECTOR (Register) */
+.role-selector{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.role-card{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg-1);cursor:pointer;transition:all .2s;text-align:left;width:100%}
+.role-card:hover{border-color:var(--border-h);background:var(--bg-2)}
+.role-card-active{border-color:rgba(232,197,71,.4)!important;background:rgba(232,197,71,.05)!important}
+
+/* TRUE/FALSE options in CreateTest */
+.tf-grid{grid-template-columns:1fr 1fr!important}
+.tf-opt{display:flex;align-items:center;gap:8px;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg-1);cursor:pointer;font-size:.9rem;color:var(--text-2);transition:all .2s;width:100%}
+.tf-opt:hover{border-color:var(--border-h);background:var(--bg-2);color:var(--text)}
+.tf-opt-active{border-color:rgba(232,197,71,.4)!important;background:rgba(232,197,71,.05)!important;color:var(--text)!important}
+
+/* RESULT EXTRAS */
+.result-grade{font-family:var(--fh);font-size:1.3rem;font-weight:800;margin-bottom:24px}
+.result-breakdown{display:flex;gap:32px;justify-content:center;margin-bottom:32px}
+.result-breakdown-item{text-align:center}
+.result-breakdown-item span{display:block;font-family:var(--fh);font-size:2rem;font-weight:800;line-height:1;margin-bottom:4px}
+.result-breakdown-label{font-family:var(--fm);font-size:.65rem;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em}
+
+/* LEADERBOARD */
+.lb-page{padding:48px 0 80px}
+.my-rank-card{background:var(--bg-1);border:1px solid rgba(232,197,71,.2);border-radius:var(--rl);padding:24px 28px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;overflow:hidden}
+.my-rank-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(232,197,71,.06) 0%,transparent 70%);pointer-events:none}
+
+/* RESPONSIVE extras */
+@media(max-width:900px){
+  .hamburger{display:flex}
+  .site-nav{display:none!important}
+  .create-page .section-card-body div[style*="grid-template-columns:'1fr 1fr 1fr'"]{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:640px){
+  .result-breakdown{gap:20px}
+  .my-rank-card{flex-direction:column;align-items:flex-start}
+  .hamburger{display:flex}
+}
+@media(max-width:480px){
+  .tf-grid{grid-template-columns:1fr!important}
+  .result-actions{flex-direction:column;align-items:center}
+}
